@@ -1,0 +1,18 @@
+{
+    "name": "hamidgh83/shortestpath",
+    "description": "This project has been designed to find the shortest path between two airports.",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Hamid Ghorashi",
+            "email": "h.ghorashi@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Application\\": "src/"
+        }
+    },
+    "require": {}
+}
