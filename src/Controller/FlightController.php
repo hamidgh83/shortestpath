@@ -11,8 +11,8 @@ class FlightController extends AbstractController
 {
     public function get()
     {
-        $origin      = $this->getRequest()->getQueryParam('org');
-        $destination = $this->getRequest()->getQueryParam('dst');
+        $origin      = strtoupper($this->getRequest()->getQueryParam('org'));
+        $destination = strtoupper($this->getRequest()->getQueryParam('dst'));
         $repository  = $this->getService(RoutesRepository::class);
         $service     = $this->getService(SearchService::class, $repository);
         

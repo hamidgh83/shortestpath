@@ -30,9 +30,9 @@ class HttpRequest
         return $_GET;
     }
 
-    public function getQueryParam($param)
+    public function getQueryParam($param, $default = null)
     {
-        return $_GET[$param] ?? null;
+        return $_GET[$param] ?? $default;
     }
 
     public function getController()
