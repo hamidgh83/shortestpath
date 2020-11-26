@@ -7,8 +7,14 @@ use PDO;
 
 class DatabaseManager
 {
+    /**
+     * @var DatabaseManager
+     */
     private static $instance = null;
 
+    /**
+     * @var Database
+     */
     private static $connection;
     
     private function __construct()

@@ -4,8 +4,11 @@ namespace Application\Service;
 
 use LessQL\Database;
 
-class AbstractService
+class AbstractService implements ServiceInterface
 {
+    /**
+     * @var Database
+     */
     private $dbManager;
 
     public function getDatabaseManager()
