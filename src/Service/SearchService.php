@@ -15,10 +15,8 @@ class SearchService extends AbstractService
     
     /**
      * Maximum layovers between origin and destination.
-     *
-     * @var integer
      */
-    protected $maxLegs = 3;
+    const MAXLEGS = 3;
     
     /**
      * The repository object to access the database.
@@ -103,18 +101,18 @@ class SearchService extends AbstractService
      * @param string $destination
      * @return array
      */
-    protected function dijkstra($origin, $destination)
+    protected function dijkstra($origin, $destination, $maxLegs)
     {
-        $this->maxLegs --;
+        $maxLegs --;
 
         if ($origin == $destination) {
             return $this->d[$destination];
         }
-        
+
         // Find all frontiers of $origin
         $frontiers = $this->getFrontiers($origin);
 
-        if (empty($frontiers) || $this->maxLegs < 0) {
+        if (empty($frontiers) || $maxLegs < 0) {
             return $this->d[$origin];
         }
 
@@ -133,7 +131,7 @@ class SearchService extends AbstractService
                 $this->d[$vertex['dst']]['prev'] = $origin;
             }
 
-            $result = $this->dijkstra($vertex['dst'], $destination);
+            $result = $this->dijkstra($vertex['dst'], $destination, $maxLegs);
 
             // Push the answer to queue
             $this->queue->push([$vertex['dst'] => $result]);
