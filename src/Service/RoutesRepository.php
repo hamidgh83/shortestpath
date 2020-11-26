@@ -15,7 +15,6 @@ class RoutesRepository extends AbstractService
             $excludeItems = ['dst' => $excludeItems];
         }
      
-        // TODO rename the table after testing
-        return $this->getDatabaseManager()->test()->where(['src' => $airport])->whereNot($excludeItems);
+        return $this->getDatabaseManager()->routes()->where(['src' => $airport])->whereNot($excludeItems);
     }
 }
