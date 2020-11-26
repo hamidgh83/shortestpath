@@ -70,12 +70,14 @@ class SearchService extends AbstractService
         $this->d[$origin]       = ['cost' => 0, 'distance' => 0, 'prev' => null];
         $this->visited[$origin] = true;
 
+        // Push the first point to route queue
         $this->queue->push([$origin => $this->d[$origin]]);
-        $this->dijkstra($origin, $destination);
+        $this->dijkstra($origin, $destination, self::MAXLEGS);
         
-        return $this->getRoutes();
-
-        // TODO find the best route
+        // Get all possible routes
+        $routes = $this->getRoutes();
+        
+        return $this->getBestRoute($routes, $destination);
     }
 
     /**
@@ -88,10 +90,32 @@ class SearchService extends AbstractService
         $path = [];
         $this->queue->setIteratorMode(SplDoublyLinkedList::IT_MODE_FIFO);
         for ($this->queue->rewind(); $this->queue->valid(); $this->queue->next()) {
-            $path[] = $this->queue->current();
+            $route        = $this->queue->current();
+            $key          = array_key_first($route);
+            $path[$key][] = $route[$key];
         }
 
         return $path;
+    }
+
+    public function getBestRoute(array $routes, string $destination)
+    {
+        $bestRoute = [];
+        
+        while (isset($routes[$destination])) {
+            $paths = $routes[$destination];
+            $costs = array_column($paths, 'cost');
+            $key   = array_search(min($costs), $costs);
+
+            if ($paths[$key]['prev'] == null) {
+                break;
+            }
+
+            $bestRoute[] = ['from' => $paths[$key]['prev'], 'to' => $destination, 'distance' => $paths[$key]['distance']];
+            $destination = $paths[$key]['prev'];
+        }
+        
+        return array_reverse($bestRoute);
     }
 
     /**
