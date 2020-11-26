@@ -4,6 +4,7 @@ namespace Application\Controller;
 
 use Application\Core\HttpRequest;
 use Application\Core\Response;
+use Application\Service\DatabaseManager;
 use RuntimeException;
 
 Abstract class AbstractController
@@ -38,7 +39,10 @@ Abstract class AbstractController
             throw new RuntimeException(sprintf("The class %s does not exist.", $service), 500);
         }
 
-        return new $service(...$options);
+        $service = new $service(...$options);
+        
+        // Inject DatabaseManager into all services
+        return $service->setDatabaseManager(DatabaseManager::getInstance());
     }
 
     public function __call($name, $arguments)

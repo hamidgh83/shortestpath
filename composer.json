@@ -14,5 +14,7 @@
             "Application\\": "src/"
         }
     },
-    "require": {}
+    "require": {
+        "morris/lessql": "^1.0"
+    }
 }
