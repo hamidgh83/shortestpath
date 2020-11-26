@@ -54,7 +54,7 @@ Abstract class AbstractController implements ControllerInterface
      * @param mixed ...$options
      * @return ServiceInterface
      */
-    protected function getService(string $service, ...$options): ServiceInterface
+    public function getService(string $service, ...$options): ServiceInterface
     {
         if (!class_exists($service)) {
             throw new RuntimeException(sprintf("The class %s does not exist.", $service), 500);
