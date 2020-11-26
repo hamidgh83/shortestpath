@@ -25,6 +25,16 @@ class HttpRequest
         return $this->uri;
     }
 
+    public function getQueryParams()
+    {
+        return $_GET;
+    }
+
+    public function getQueryParam($param)
+    {
+        return $_GET[$param] ?? null;
+    }
+
     public function getController()
     {
         $namespace  = '\Application\Controller\\';
@@ -35,7 +45,7 @@ class HttpRequest
             throw new NotFoundException();
         }
 
-        return new $controller;
+        return new $controller($this);
     }
     
     public function getAction()
