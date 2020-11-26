@@ -11,5 +11,5 @@ interface ControllerInterface
 
     public function setStatusCode($statusCode);
 
-    public function getService(string $service, ...$options): ServiceInterface
+    public function getService(string $service, ...$options): ServiceInterface;
 }
