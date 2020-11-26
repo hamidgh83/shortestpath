@@ -5,18 +5,32 @@ namespace Application\Controller;
 use Application\Core\HttpRequest;
 use Application\Core\Response;
 use Application\Service\DatabaseManager;
+use Application\Service\ServiceInterface;
 use RuntimeException;
 
-Abstract class AbstractController
+Abstract class AbstractController implements ControllerInterface
 {
+    /**
+     * @var HttpRequest
+     */
     private $request;
 
+    /**
+     * Constructor function
+     *
+     * @param HttpRequest $request
+     */
     public function __construct(HttpRequest $request)
     {
         $this->request = $request;    
     }
 
-    public function getRequest()
+    /**
+     * Return HttpRequest
+     *
+     * @return HttpRequest
+     */
+    public function getRequest(): HttpRequest
     {
         return $this->request;
     }    
@@ -33,7 +47,14 @@ Abstract class AbstractController
         http_response_code();
     }
 
-    protected function getService(string $service, ...$options)
+    /**
+     * Get aan identified service.
+     *
+     * @param string $service
+     * @param mixed ...$options
+     * @return ServiceInterface
+     */
+    protected function getService(string $service, ...$options): ServiceInterface
     {
         if (!class_exists($service)) {
             throw new RuntimeException(sprintf("The class %s does not exist.", $service), 500);

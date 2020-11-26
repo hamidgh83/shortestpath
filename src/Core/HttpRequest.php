@@ -35,44 +35,6 @@ class HttpRequest
         return $_GET[$param] ?? $default;
     }
 
-    public function getController()
-    {
-        $namespace  = '\Application\Controller\\';
-        $controller = (isset($this->uri[1]) && strlen(trim($this->uri[1])) > 0 ? $this->uri[1] : 'Default') . 'Controller';
-        $controller = $namespace . ucfirst($controller);
-
-        if (!class_exists($controller)) {
-            throw new NotFoundException();
-        }
-
-        return new $controller($this);
-    }
-    
-    public function getAction()
-    {
-        $action = null;
-
-        switch ($this->requestMethod) {
-            case 'GET':
-                $action = 'get';
-                break;
-            case 'POST':
-                $action = 'create';
-                break;
-            case 'PUT':
-                $action = 'update';
-                break;
-            case 'DELETE':
-                $action = 'delete';
-                break;
-            default:
-                $action = 'options';
-                break;
-        }
-
-        return $action;
-    }
-
     private function process()
     {
         $this->requestMethod = $_SERVER["REQUEST_METHOD"];

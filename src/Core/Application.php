@@ -2,21 +2,37 @@
 
 namespace Application\Core;
 
+use Application\Controller\ControllerInterface;
+use Application\Exception\NotFoundException;
+
 class Application
 {
+    /**
+     * @var HttpRequest
+     */
     protected $request;
 
+    /**
+     * Constructor function
+     *
+     * @param HttpRequest $request
+     */
     public function __construct(HttpRequest $request)
     {
         $this->request = $request; 
         $this->addHeaders();
     }
 
+    /**
+     * This runs the application and print the result.
+     *
+     * @return string Json string of Response object
+     */
     public function run()
     {
         try {
-            $controller = $this->request->getController();
-            $action     = $this->request->getAction();
+            $controller = $this->getController();
+            $action     = $this->getAction();
             $response   = $controller->$action();
         
             if (!$response instanceof Response) {
@@ -31,16 +47,60 @@ class Application
         echo $response;
     }
 
-    public function getController()
+    /**
+     * This returns corresponding controller to the http route.
+     *
+     * @return ControllerInterface
+     * @throws NotFoundException
+     */
+    protected function getController(): ControllerInterface
     {
-        return $this->request->getController();
+        $namespace  = '\Application\Controller\\';
+        $controller = (isset($this->request->getUri()[1]) && strlen(trim($this->request->getUri()[1])) > 0 ? $this->request->getUri()[1] : 'Default') . 'Controller';
+        $controller = $namespace . ucfirst($controller);
+
+        if (!class_exists($controller)) {
+            throw new NotFoundException();
+        }
+
+        return new $controller($this->request);
+    }
+    
+    /**
+     * This gets action based on the http request.
+     *
+     * @return string
+     */
+    protected function getAction()
+    {
+        $action = null;
+
+        switch ($this->request->getMethod()) {
+            case 'GET':
+                $action = 'get';
+                break;
+            case 'POST':
+                $action = 'create';
+                break;
+            case 'PUT':
+                $action = 'update';
+                break;
+            case 'DELETE':
+                $action = 'delete';
+                break;
+            default:
+                $action = 'options';
+                break;
+        }
+
+        return $action;
     }
 
-    public function getAction()
-    {
-        return $this->request->getAction();
-    }
-
+    /**
+     * Add defualt hearders.
+     *
+     * @return void
+     */
     private function addHeaders()
     {
         header("Access-Control-Allow-Origin: *");
