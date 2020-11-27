@@ -35,7 +35,7 @@ class Application
             $action     = $this->getAction();
             $response   = $controller->$action();
         
-            if (!$response instanceof Response) {
+            if (!$response instanceof Response && !$this->isJsonResponse($response)) {
                 throw new \RuntimeException("Invalid response.", 500);
             }
         } catch (\Throwable $ex) {
@@ -45,6 +45,12 @@ class Application
         }
 
         echo $response;
+    }
+
+    protected function isJsonResponse($response) {
+        json_decode($response);
+        
+        return (json_last_error() == JSON_ERROR_NONE);
     }
 
     /**
