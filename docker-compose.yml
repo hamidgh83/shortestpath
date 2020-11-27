@@ -11,6 +11,8 @@ services:
       - "8000:80"
     depends_on:
       - php
+    volumes_from:
+      - php
 
   php:
     container_name: php
@@ -18,3 +20,5 @@ services:
       context: ./
       dockerfile: ./docker/php/Dockerfile
     restart: always
+    volumes:
+      - "/var/www/shortestpath/"
