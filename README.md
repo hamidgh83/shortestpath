@@ -3,7 +3,7 @@ This project is to build a JSON over HTTP API endpoint that takes as input two I
 
 ### Installation
 
-After cloning the repository, you can choose one of these methods to run the application:
+After cloning the repository, you can run the project as follows:
 
 - ##### Using docker-compose
 
@@ -14,6 +14,10 @@ $ docker-compose up -d
 ```
 
 Then the application will run at port 8000 and you can get access to it via http://localhost:8000.
+
+### Data structure
+
+This project uses Sqlite3 to store the information of 3282 airports and their routes to other airports. You can find the database at **[data](https://github.com/hamidgh83/shortestpath/tree/master/data)** directory
 
 ### How it works
 
